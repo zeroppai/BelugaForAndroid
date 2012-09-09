@@ -86,6 +86,12 @@ public class MainActivity extends Activity {
 		intent.setAction(Intent.ACTION_VIEW);
 		startActivity(intent);
 	}
+	
+	private void goUpdateAction() {
+		Intent intent = new Intent(MainActivity.this, UpdateActivity.class);
+		intent.setAction(Intent.ACTION_VIEW);
+		startActivity(intent);
+	}
 
 	@Override public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
@@ -96,6 +102,7 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.item1: // 書き込み
+			goUpdateAction();
 			break;
 		case R.id.item2: // 更新
 			updateTimeline();

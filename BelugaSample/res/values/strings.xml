@@ -9,5 +9,6 @@
     <string name="menu_room_list">ルーム一覧</string>
     <string name="menu_option">設定</string>
     <string name="option_activity">設定</string>
+    <string name="update_activity">投稿</string>
 
 </resources>
