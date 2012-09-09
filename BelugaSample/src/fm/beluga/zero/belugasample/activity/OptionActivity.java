@@ -18,13 +18,6 @@ public class OptionActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_option);
 
-		Button auth_button = (Button) findViewById(R.id.auth_button);
-		auth_button.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				doIntent(Intent.ACTION_VIEW, Beluga.auth_url);
-			}
-		});
-
 		Uri uri = getIntent().getData();
 		if (uri != null) {
 			beluga.setUserToken(uri.getQueryParameter("user_id"), uri.getQueryParameter("user_token"));
@@ -34,6 +27,13 @@ public class OptionActivity extends Activity {
 				Toast.makeText(this, "認証に失敗しました。", Toast.LENGTH_LONG).show();
 			}
 		}
+
+		Button auth_button = (Button) findViewById(R.id.auth_button);
+		auth_button.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				doIntent(Intent.ACTION_VIEW, Beluga.auth_url);
+			}
+		});
 
 		TextView text = (TextView)findViewById(R.id.auth_label);
 		if (beluga.isConnected()) {

@@ -7,7 +7,9 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -23,12 +25,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.widget.Toast;
 
 public class Beluga {
 	public static final String app_id = "41";
@@ -41,10 +39,20 @@ public class Beluga {
 	static Beluga beluga_instanec = new Beluga();
 	private String last_id = "0";
 
+	private Map<String, Room> room_list = new HashMap<String, Room>();
+
+	/**
+	 * タイムライン
+	 */
 	public static class Timeline {
 		public int id;
 		public String name, text, date_string, room_name;
 		public Bitmap icon_x50, icon_x75, icon_x100;
+	};
+
+	public static class Room {
+		public int id, last_update_time;
+		public String name, url, hash;
 	};
 
 	public static Beluga Instance() {
@@ -67,6 +75,17 @@ public class Beluga {
 		}
 	}
 
+	public List<Room> getRoomList() {
+		return new ArrayList<Beluga.Room>(room_list.values());
+	}
+
+	/**
+	 * タイムラインを取得する
+	 * 
+	 * @param since_id
+	 *            指定したID以降を取得する
+	 * @return List<Timeline> タイムラインのリスト
+	 */
 	public List<Timeline> getHome() {
 		return getHome("0");
 	}
@@ -90,6 +109,7 @@ public class Beluga {
 				tl.text = jsonObj.getString("text");
 				tl.date_string = jsonObj.getString("date_string");
 
+				// アイコン処理
 				try {
 					String url_x50 = jsonObj.getJSONObject("user").getJSONObject("profile_image_sizes").getString("x50");
 					String url_x75 = jsonObj.getJSONObject("user").getJSONObject("profile_image_sizes").getString("x75");
@@ -105,7 +125,19 @@ public class Beluga {
 					e.printStackTrace();
 				}
 
-				tl.room_name = jsonObj.getJSONObject("room").getString("name");
+				// ルーム処理
+				JSONObject obj = jsonObj.getJSONObject("room");
+				tl.room_name = obj.getString("name");
+
+				if (!room_list.containsKey(obj.getString("hash"))) {
+					Room room = new Room();
+					room.id = obj.getInt("id");
+					room.name = obj.getString("name");
+					room.hash = obj.getString("hash");
+					room.url = obj.getString("url");
+					room.last_update_time = obj.getInt("last_update_time");
+					room_list.put(room.hash, room);
+				}
 				list.add(tl);
 			}
 		} catch (JSONException e) {
