@@ -41,6 +41,8 @@ public class MainActivity extends Activity {
 		if(!beluga.isConnected()){
 			Toast.makeText(this, "トークンが設定されていません", Toast.LENGTH_LONG).show();
 			goOptionAction();
+		}else{
+			beluga.postText("29Kw_gYAk2RIY", "おっぱい");
 		}
 
 		List<Beluga.Timeline> list = beluga.getHome();

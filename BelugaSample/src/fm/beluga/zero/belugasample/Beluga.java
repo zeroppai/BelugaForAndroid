@@ -43,7 +43,7 @@ public class Beluga {
 	private Map<String, Room> room_list = new HashMap<String, Room>();
 
 	/**
-	 * タイムライン
+	 * タイムライン class
 	 */
 	public static class Timeline {
 		public int id;
@@ -80,6 +80,13 @@ public class Beluga {
 		return new ArrayList<Beluga.Room>(room_list.values());
 	}
 
+	/**
+	 * 指定したルームに投稿する。
+	 * 
+	 * @param text
+	 * @param room_hash
+	 * @return boolean
+	 */
 	public boolean postText(String text) {
 		return postText("11eJDfcF96UIc", text);
 	}
@@ -109,8 +116,8 @@ public class Beluga {
 		String url = "http://api.beluga.fm/1/statuses/home?user_id=" + user_id + "&user_token=" + user_token + "&app_id="
 				+ app_id + "&app_secret=" + app_secret + "&since_id=" + since_id;
 		List<Timeline> list = stringToJson(getData(url));
-
-		if (list.size() > 0) this.last_id = String.valueOf(list.get(0).id);
+		if (list!=null && list.size() > 0) this.last_id = String.valueOf(list.get(0).id);
+		
 		return list;
 	}
 
@@ -131,7 +138,7 @@ public class Beluga {
 		if(since_id!="") url +=  "&since_id=" + since_id;
 		List<Timeline> list = stringToJson(getData(url));
 		
-		if (list.size() > 0) this.last_id = String.valueOf(list.get(0).id);
+		if (list!=null && list.size() > 0) this.last_id = String.valueOf(list.get(0).id);
 		return list;
 	}
 
