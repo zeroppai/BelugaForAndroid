@@ -54,7 +54,7 @@ public class Beluga {
 	public static class Room {
 		public int id, last_update_time;
 		public String name, url, hash;
-		@Override public String toString(){return name;}
+		public Object tmp;
 	};
 
 	public static Beluga Instance() {
@@ -172,6 +172,9 @@ public class Beluga {
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+				} catch (Exception e) {
+					// TODO: handle exception
+					e.printStackTrace();
 				}
 
 				// ルーム処理
@@ -181,6 +184,7 @@ public class Beluga {
 				if (!room_list.containsKey(obj.getString("id"))) {
 					Room room = new Room();
 					room.id = obj.getInt("id");
+					room.tmp = obj.get("name");
 					room.name = obj.getString("name");
 					room.hash = obj.getString("hash");
 					room.url = obj.getString("url");
