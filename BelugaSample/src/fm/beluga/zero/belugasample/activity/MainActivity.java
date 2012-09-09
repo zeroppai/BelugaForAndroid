@@ -32,6 +32,8 @@ public class MainActivity extends Activity {
 	private List<Beluga.Timeline> timeline_list = new ArrayList<Beluga.Timeline>();
 	private Timer timer;
 	private Handler handler = new Handler();
+	
+	private final String APP_STRAGE = "BelugaApp";
 
 	@Override public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

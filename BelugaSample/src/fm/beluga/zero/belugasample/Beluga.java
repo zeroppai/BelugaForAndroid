@@ -54,6 +54,7 @@ public class Beluga {
 	public static class Room {
 		public int id, last_update_time;
 		public String name, url, hash;
+		@Override public String toString(){return name;}
 	};
 
 	public static Beluga Instance() {
@@ -177,14 +178,14 @@ public class Beluga {
 				JSONObject obj = jsonObj.getJSONObject("room");
 				tl.room_name = obj.getString("name");
 
-				if (!room_list.containsKey(obj.getString("hash"))) {
+				if (!room_list.containsKey(obj.getString("id"))) {
 					Room room = new Room();
 					room.id = obj.getInt("id");
 					room.name = obj.getString("name");
 					room.hash = obj.getString("hash");
 					room.url = obj.getString("url");
 					room.last_update_time = obj.getInt("last_update_time");
-					room_list.put(room.hash, room);
+					room_list.put(obj.getString("id"), room);
 				}
 				list.add(tl);
 			}

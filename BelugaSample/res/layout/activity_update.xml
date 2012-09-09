@@ -33,16 +33,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
-            <ExpandableListView
-                android:id="@+id/expandableListView1"
-                android:layout_width="209dp"
-                android:layout_height="63dp" >
-            </ExpandableListView>
+            <Spinner
+                android:id="@+id/spinner1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
 
             <Button
                 android:id="@+id/edit_update_button"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="投稿" />
         </LinearLayout>
     </LinearLayout>
