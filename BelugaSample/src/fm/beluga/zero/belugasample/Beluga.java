@@ -27,6 +27,7 @@ import org.json.JSONObject;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 public class Beluga {
 	public static final String app_id = "41";
@@ -79,11 +80,21 @@ public class Beluga {
 		return new ArrayList<Beluga.Room>(room_list.values());
 	}
 
+	public boolean postText(String text) {
+		return postText("11eJDfcF96UIc", text);
+	}
+
+	public boolean postText(String room_hash, String text) {
+		String url = "http://api.beluga.fm/1/statuses/update?user_id=" + user_id + "&user_token=" + user_token + "&app_id="
+				+ app_id + "&app_secret=" + app_secret + "&room_hash=" + room_hash + "&text=" + text;
+		Log.d("homo", getData(url));
+		return true;
+	}
+
 	/**
-	 * タイムラインを取得する
+	 * タイムラインを取得する。 since_idで指定したID以降を取得する。
 	 * 
 	 * @param since_id
-	 *            指定したID以降を取得する
 	 * @return List<Timeline> タイムラインのリスト
 	 */
 	public List<Timeline> getHome() {
@@ -97,10 +108,40 @@ public class Beluga {
 	public List<Timeline> getHome(String since_id) {
 		String url = "http://api.beluga.fm/1/statuses/home?user_id=" + user_id + "&user_token=" + user_token + "&app_id="
 				+ app_id + "&app_secret=" + app_secret + "&since_id=" + since_id;
-		ArrayList<Timeline> list = new ArrayList<Timeline>();
+		List<Timeline> list = stringToJson(getData(url));
 
+		if (list.size() > 0) this.last_id = String.valueOf(list.get(0).id);
+		return list;
+	}
+
+	
+	/**
+	 * 指定したタイムラインを取得する。 since_idで指定したID以降を取得する。
+	 * 
+	 * @param since_id
+	 * @return List<Timeline> タイムラインのリスト
+	 */
+	public List<Timeline> getRoom(String room_hash) {
+		return getRoom(room_hash,"");
+	}
+	
+	public List<Timeline> getRoom(String room_hash, String since_id) {
+		String url = "http://api.beluga.fm/1/statuses/room?user_id=" + user_id + "&user_token=" + user_token + "&app_id="
+				+ app_id + "&app_secret=" + app_secret + "&room_hash=" + room_hash;
+		if(since_id!="") url +=  "&since_id=" + since_id;
+		List<Timeline> list = stringToJson(getData(url));
+		
+		if (list.size() > 0) this.last_id = String.valueOf(list.get(0).id);
+		return list;
+	}
+
+	/**
+	 * StringからList<Timeline>に変換する
+	 */
+	private List<Timeline> stringToJson(String text) {
+		ArrayList<Timeline> list = new ArrayList<Timeline>();
 		try {
-			JSONArray jsons = new JSONArray(getData(url));
+			JSONArray jsons = new JSONArray(text);
 			for (int i = 0; i < jsons.length(); i++) {
 				JSONObject jsonObj = jsons.getJSONObject(i);
 				Timeline tl = new Timeline();
@@ -145,11 +186,6 @@ public class Beluga {
 			e.printStackTrace();
 			return null;
 		}
-
-		if (list.size() > 0) {
-			this.last_id = String.valueOf(list.get(0).id);
-		}
-
 		return list;
 	}
 
