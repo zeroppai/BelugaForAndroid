@@ -9,6 +9,7 @@ import java.util.TimerTask;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -32,23 +33,27 @@ public class MainActivity extends Activity {
 	private List<Beluga.Timeline> timeline_list = new ArrayList<Beluga.Timeline>();
 	private Timer timer;
 	private Handler handler = new Handler();
-	
-	private final String APP_STRAGE = "BelugaApp";
+
+	public static final String APP_STRAGE = "BelugaConfig";
 
 	@Override public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
+		// Load Config
+		SharedPreferences settings = getSharedPreferences(APP_STRAGE, 0);
+		beluga.setUserToken(settings.getString("user_id", ""), settings.getString("user_token", ""));
+
 		// Check Token
-		if(!beluga.isConnected()){
+		if (!beluga.isConnected()) {
 			Toast.makeText(this, "トークンが設定されていません", Toast.LENGTH_LONG).show();
 			goOptionAction();
-		}else{
+		} else {
 			beluga.postText("29Kw_gYAk2RIY", "おっぱい");
 		}
 
 		List<Beluga.Timeline> list = beluga.getHome();
-		if(list != null) timeline_list.addAll(list);
+		if (list != null) timeline_list.addAll(list);
 
 		// Timer
 		timer = new Timer(true);
@@ -82,13 +87,13 @@ public class MainActivity extends Activity {
 			}
 		}
 	}
-	
+
 	private void goOptionAction() {
 		Intent intent = new Intent(MainActivity.this, OptionActivity.class);
 		intent.setAction(Intent.ACTION_VIEW);
 		startActivity(intent);
 	}
-	
+
 	private void goUpdateAction() {
 		Intent intent = new Intent(MainActivity.this, UpdateActivity.class);
 		intent.setAction(Intent.ACTION_VIEW);

@@ -2,6 +2,7 @@ package fm.beluga.zero.belugasample.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -13,17 +14,26 @@ import fm.beluga.zero.belugasample.R;
 
 public class OptionActivity extends Activity {
 	Beluga beluga = Beluga.Instance();
-	
+
 	@Override public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_option);
 
 		Uri uri = getIntent().getData();
 		if (uri != null) {
-			beluga.setUserToken(uri.getQueryParameter("user_id"), uri.getQueryParameter("user_token"));
-			if(beluga.isConnected()){
+			final String user_id = uri.getQueryParameter("user_id");
+			final String user_token = uri.getQueryParameter("user_token");
+			beluga.setUserToken(user_id, user_token);
+			if (beluga.isConnected()) {
+				// Save Setting
+				SharedPreferences settings = getSharedPreferences(MainActivity.APP_STRAGE, 0);
+				SharedPreferences.Editor editor = settings.edit();
+				editor.putString("user_id", user_id);
+				editor.putString("user_token", user_token);
+				editor.commit();
+
 				Toast.makeText(this, "認証しました", Toast.LENGTH_LONG).show();
-			}else{
+			} else {
 				Toast.makeText(this, "認証に失敗しました。", Toast.LENGTH_LONG).show();
 			}
 		}
@@ -35,27 +45,27 @@ public class OptionActivity extends Activity {
 			}
 		});
 
-		TextView text = (TextView)findViewById(R.id.auth_label);
+		TextView text = (TextView) findViewById(R.id.auth_label);
 		if (beluga.isConnected()) {
 			text.setText("認証済み");
-		}else{
+		} else {
 			text.setText("未認証");
 		}
-		
-		Button back_button = (Button)findViewById(R.id.option_back_button);
+
+		Button back_button = (Button) findViewById(R.id.option_back_button);
 		back_button.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				goMainAction();
 			}
 		});
 	}
-	
+
 	private void goMainAction() {
 		Intent intent = new Intent(OptionActivity.this, MainActivity.class);
 		intent.setAction(Intent.ACTION_VIEW);
 		startActivity(intent);
 	}
-	
+
 	private void doIntent(String action, String uriString) {
 		try {
 			Intent intent = new Intent(action, Uri.parse(uriString));
