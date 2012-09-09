@@ -52,8 +52,12 @@ public class MainActivity extends Activity {
 			beluga.postText("29Kw_gYAk2RIY", "おっぱい");
 		}
 
-		List<Beluga.Timeline> list = beluga.getHome();
-		if (list != null) timeline_list.addAll(list);
+		new Thread(new Runnable() {
+			@Override public void run() {
+				List<Beluga.Timeline> list = beluga.getHome();
+				if (list != null) timeline_list.addAll(list);
+			}
+		}).start();
 
 		// Timer
 		timer = new Timer(true);
