@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+ xmlns:android="http://schemas.android.com/apk/res/android">
+ <item 
+ android:id="@+id/item1"
+ android:title="@string/menu_write"
+ android:icon="@android:drawable/ic_menu_edit"
+ ></item>
+ <item 
+ android:id="@+id/item2"
+ android:title="@string/menu_update"
+ android:icon="@android:drawable/ic_menu_rotate"
+ ></item>
+ <item 
+ android:id="@+id/item3"
+ android:title="@string/menu_room_list"
+ android:icon="@android:drawable/ic_menu_agenda"
+ ></item>
+ <item 
+ android:id="@+id/item4"
+ android:title="@string/menu_option"
+ android:icon="@android:drawable/ic_menu_preferences"
+ ></item>
+</menu>
