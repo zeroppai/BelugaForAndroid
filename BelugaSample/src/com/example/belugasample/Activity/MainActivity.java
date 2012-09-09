@@ -1,4 +1,4 @@
-package com.example.belugasample;
+package com.example.belugasample.Activity;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,7 +21,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.belugasample.Beluga;
+import com.example.belugasample.R;
+import com.example.belugasample.Beluga.Timeline;
 import com.example.belugasample.R.id;
+import com.example.belugasample.R.layout;
+import com.example.belugasample.R.menu;
 
 public class MainActivity extends Activity {
 	private ListAdapter listAdapter;

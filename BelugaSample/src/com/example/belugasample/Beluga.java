@@ -32,6 +32,7 @@ public class Beluga {
 	final String app_secret = "NDNlYTNkYzc1OGYzMzQ5NzkyYzE2ZjYwNzBmZjdjNjUxZjRhYjQyOAXX";
 	String user_id = "29025";
 	String user_token = "NjllMGJhZmVhMzE1NzhjNmEyNzBlOGMxZDc1OGVlYTIX";
+	String auth_url = "http://beluga.fm/authorize?app_id=41";
 	
 	private String last_id = "0";
 	
