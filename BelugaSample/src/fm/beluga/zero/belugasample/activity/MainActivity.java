@@ -92,7 +92,13 @@ public class MainActivity extends Activity {
 			}
 		}
 	}
-
+	
+	private void goRoomlistAction() {
+		Intent intent = new Intent(MainActivity.this, RoomlistActivity.class);
+		intent.setAction(Intent.ACTION_VIEW);
+		startActivity(intent);
+	}
+	
 	private void goOptionAction() {
 		Intent intent = new Intent(MainActivity.this, OptionActivity.class);
 		intent.setAction(Intent.ACTION_VIEW);
@@ -121,6 +127,7 @@ public class MainActivity extends Activity {
 			listAdapter.notifyDataSetChanged();
 			break;
 		case R.id.item3: // ルーム一覧
+			goRoomlistAction();
 			break;
 		case R.id.item4: // 設定
 			goOptionAction();

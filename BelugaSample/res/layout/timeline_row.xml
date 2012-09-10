@@ -37,6 +37,7 @@
                 android:ems="10"
                 android:inputType="textMultiLine"
                 android:text="text is here"
+                android:textColor="#ff000000"
                 android:textSize="16sp" />
 
             <TextView
@@ -45,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:text="0000-00-00 00:00:00"
-                android:textSize="7sp" />
+                android:textSize="9sp" />
         </LinearLayout>
     </LinearLayout>
 

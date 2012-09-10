@@ -1,5 +1,6 @@
 package fm.beluga.zero.belugasample.activity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -15,25 +16,26 @@ import fm.beluga.zero.belugasample.Beluga;
 import fm.beluga.zero.belugasample.R;
 
 public class RoomlistActivity extends Activity {
-	private ListAdapter listAdapter;
+	private RoomListAdapter listAdapter;
 	private Beluga beluga = Beluga.Instance();
+	private List<Beluga.Room> room_list = new ArrayList<Beluga.Room>();;
 	
 	@Override public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_roomlist);
 		
-		List<Beluga.Room> list = beluga.getRoomList();
-		listAdapter = new ListAdapter(getApplicationContext(), list);
-
-		ListView listView = (ListView)findViewById(R.id.room_list_view);
+		room_list = beluga.getRoomList();
+		listAdapter = new RoomListAdapter(getApplicationContext(), room_list);
+		
+		ListView listView = (ListView)this.findViewById(R.id.room_list_view);
 		listView.setAdapter(listAdapter);
 	}
 
-	public class ListAdapter extends ArrayAdapter<Beluga.Room> {
+	public class RoomListAdapter extends ArrayAdapter<Beluga.Room> {
 		private LayoutInflater mInflater;
 		private TextView mName, mDesc, mUrl;
 
-		public ListAdapter(Context context, List<Beluga.Room> objects) {
+		public RoomListAdapter(Context context, List<Beluga.Room> objects) {
 			super(context, 0, objects);
 			mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		}
@@ -45,9 +47,9 @@ public class RoomlistActivity extends Activity {
 
 			final Beluga.Room item = this.getItem(position);
 			if (item != null) {
-				mName = (TextView)findViewById(R.id.roomlist_row_name);
-				mDesc = (TextView)findViewById(R.id.roomlist_row_description);
-				mUrl = (TextView)findViewById(R.id.roomlist_row_url);
+				mName = (TextView)convertView.findViewById(R.id.roomlist_row_name);
+				mDesc = (TextView)convertView.findViewById(R.id.roomlist_row_description);
+				mUrl = (TextView)convertView.findViewById(R.id.roomlist_row_url);
 				
 				mName.setText(item.name);
 				mDesc.setText(item.description);

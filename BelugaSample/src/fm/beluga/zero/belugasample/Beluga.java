@@ -7,7 +7,9 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -38,13 +40,13 @@ public class Beluga {
 	static Beluga beluga_instanec = new Beluga();
 	private String last_id = "0";
 
-	private List<Room> room_list;
+	private Map<Integer,Room> room_list = null;
 
 	/**
 	 * タイムライン class
 	 */
 	public static class Timeline {
-		public int id;
+		public int id,room_id;
 		public String name, text, date_string, room_name;
 		public Bitmap icon_x50, icon_x75, icon_x100;
 	}
@@ -75,17 +77,30 @@ public class Beluga {
 		}
 	}
 
+	/**
+	 * ルームの検索、なければnull
+	 * @param id
+	 * @return
+	 */
+	public Room searchRoom(int id) {
+		return room_list.get(id);
+	}
+	
+	/**
+	 * ルームリストの取得
+	 * @return
+	 */
 	public List<Room> getRoomList() {
-		if (room_list != null) {
+		if (room_list == null) {
 			room_list = getFollowing();
 		}
-		return room_list;
+		return new ArrayList<Room>(room_list.values());
 	}
 
-	private List<Room> getFollowing() {
+	private Map<Integer,Room> getFollowing() {
 		String url = "http://api.beluga.fm/1/account/following?user_id=" + user_id + "&user_token=" + user_token + "&app_id="
 				+ app_id + "&app_secret=" + app_secret;
-		List<Room> list = new ArrayList<Beluga.Room>();
+		Map<Integer,Room> list = new HashMap<Integer,Beluga.Room>();
 		try {
 			JSONArray jsons = new JSONArray(getData(url));
 			for (int i = 0; i < jsons.length(); i++) {
@@ -97,10 +112,11 @@ public class Beluga {
 				room.description = obj.getString("description");
 				room.url = obj.getString("url");
 				room.last_update_time = obj.getInt("last_update_time");
-				list.add(room);
+				list.put(room.id,room);
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return list;
 	}
@@ -180,6 +196,9 @@ public class Beluga {
 				tl.name = jsonObj.getJSONObject("user").getString("name");
 				tl.text = jsonObj.getString("text");
 				tl.date_string = jsonObj.getString("date_string");
+				
+				tl.room_id = jsonObj.getJSONObject("room").getInt("id");
+				tl.room_name = jsonObj.getJSONObject("room").getString("name");
 
 				// アイコン処理
 				try {
