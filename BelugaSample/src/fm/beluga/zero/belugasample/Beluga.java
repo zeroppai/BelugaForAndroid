@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -100,7 +101,7 @@ public class Beluga {
 	private Map<Integer,Room> getFollowing() {
 		String url = "http://api.beluga.fm/1/account/following?user_id=" + user_id + "&user_token=" + user_token + "&app_id="
 				+ app_id + "&app_secret=" + app_secret;
-		Map<Integer,Room> list = new HashMap<Integer,Beluga.Room>();
+		Map<Integer,Room> list = new TreeMap<Integer, Room>();
 		try {
 			JSONArray jsons = new JSONArray(getData(url));
 			for (int i = 0; i < jsons.length(); i++) {
