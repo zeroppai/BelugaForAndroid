@@ -7,9 +7,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -40,7 +38,7 @@ public class Beluga {
 	static Beluga beluga_instanec = new Beluga();
 	private String last_id = "0";
 
-	private Map<String, Room> room_list = new HashMap<String, Room>();
+	private List<Room> room_list;
 
 	/**
 	 * タイムライン class
@@ -49,13 +47,13 @@ public class Beluga {
 		public int id;
 		public String name, text, date_string, room_name;
 		public Bitmap icon_x50, icon_x75, icon_x100;
-	};
+	}
 
 	public static class Room {
-		public int id, last_update_time;
-		public String name, url, hash;
-		public Object tmp;
-	};
+		public int id, category_id, first_status_id, created_at, permission, created_by, last_status_id, last_update_time;
+		public String name, short_url, url, hash, description;
+		public boolean secret, show_followers;
+	}
 
 	public static Beluga Instance() {
 		return beluga_instanec;
@@ -78,7 +76,33 @@ public class Beluga {
 	}
 
 	public List<Room> getRoomList() {
-		return new ArrayList<Beluga.Room>(room_list.values());
+		if (room_list != null) {
+			room_list = getFollowing();
+		}
+		return room_list;
+	}
+
+	private List<Room> getFollowing() {
+		String url = "http://api.beluga.fm/1/account/following?user_id=" + user_id + "&user_token=" + user_token + "&app_id="
+				+ app_id + "&app_secret=" + app_secret;
+		List<Room> list = new ArrayList<Beluga.Room>();
+		try {
+			JSONArray jsons = new JSONArray(getData(url));
+			for (int i = 0; i < jsons.length(); i++) {
+				JSONObject obj = jsons.getJSONObject(i);
+				Room room = new Room();
+				room.id = obj.getInt("id");
+				room.name = obj.getString("name");
+				room.hash = obj.getString("hash");
+				room.description = obj.getString("description");
+				room.url = obj.getString("url");
+				room.last_update_time = obj.getInt("last_update_time");
+				list.add(room);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return list;
 	}
 
 	/**
@@ -117,12 +141,11 @@ public class Beluga {
 		String url = "http://api.beluga.fm/1/statuses/home?user_id=" + user_id + "&user_token=" + user_token + "&app_id="
 				+ app_id + "&app_secret=" + app_secret + "&since_id=" + since_id;
 		List<Timeline> list = stringToJson(getData(url));
-		if (list!=null && list.size() > 0) this.last_id = String.valueOf(list.get(0).id);
-		
+		if (list != null && list.size() > 0) this.last_id = String.valueOf(list.get(0).id);
+
 		return list;
 	}
 
-	
 	/**
 	 * 指定したタイムラインを取得する。 since_idで指定したID以降を取得する。
 	 * 
@@ -130,16 +153,16 @@ public class Beluga {
 	 * @return List<Timeline> タイムラインのリスト
 	 */
 	public List<Timeline> getRoom(String room_hash) {
-		return getRoom(room_hash,"");
+		return getRoom(room_hash, "");
 	}
-	
+
 	public List<Timeline> getRoom(String room_hash, String since_id) {
 		String url = "http://api.beluga.fm/1/statuses/room?user_id=" + user_id + "&user_token=" + user_token + "&app_id="
 				+ app_id + "&app_secret=" + app_secret + "&room_hash=" + room_hash;
-		if(since_id!="") url +=  "&since_id=" + since_id;
+		if (since_id != "") url += "&since_id=" + since_id;
 		List<Timeline> list = stringToJson(getData(url));
-		
-		if (list!=null && list.size() > 0) this.last_id = String.valueOf(list.get(0).id);
+
+		if (list != null && list.size() > 0) this.last_id = String.valueOf(list.get(0).id);
 		return list;
 	}
 
@@ -175,21 +198,6 @@ public class Beluga {
 				} catch (Exception e) {
 					// TODO: handle exception
 					e.printStackTrace();
-				}
-
-				// ルーム処理
-				JSONObject obj = jsonObj.getJSONObject("room");
-				tl.room_name = obj.getString("name");
-
-				if (!room_list.containsKey(obj.getString("id"))) {
-					Room room = new Room();
-					room.id = obj.getInt("id");
-					room.tmp = obj.get("name");
-					room.name = obj.getString("name");
-					room.hash = obj.getString("hash");
-					room.url = obj.getString("url");
-					room.last_update_time = obj.getInt("last_update_time");
-					room_list.put(obj.getString("id"), room);
 				}
 				list.add(tl);
 			}

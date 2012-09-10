@@ -50,6 +50,7 @@ public class MainActivity extends Activity {
 			goOptionAction();
 		} else {
 			Toast.makeText(this, "タイムラインを取得してます", Toast.LENGTH_LONG).show();
+			beluga.getRoomList();
 		}
 
 		new Thread(new Runnable() {
@@ -142,7 +143,7 @@ public class MainActivity extends Activity {
 
 		public View getView(final int position, View convertView, ViewGroup parent) {
 			if (convertView == null) {
-				convertView = mInflater.inflate(R.layout.row, null);
+				convertView = mInflater.inflate(R.layout.timeline_row, null);
 			}
 
 			final Beluga.Timeline item = this.getItem(position);
