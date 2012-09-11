@@ -122,6 +122,10 @@ public class MainActivity extends Activity {
 		case R.id.item1: // 書き込み
 			goUpdateAction();
 			break;
+		case R.id.item_oppai: // おっぱい
+			beluga.postText(getString(R.string.oppai));
+			Toast.makeText(getApplicationContext(), R.string.oppai, Toast.LENGTH_SHORT).show();
+			break;
 		case R.id.item2: // 更新
 			updateTimeline();
 			listAdapter.notifyDataSetChanged();
