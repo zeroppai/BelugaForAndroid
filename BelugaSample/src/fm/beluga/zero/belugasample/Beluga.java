@@ -6,8 +6,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -134,8 +134,14 @@ public class Beluga {
 	}
 
 	public boolean postText(String room_hash, String text) {
+		String encode_text = null;
+		try {
+			encode_text = URLEncoder.encode(text,"UTF-8");
+		} catch (Exception e) {
+			return false;
+		}
 		String url = "http://api.beluga.fm/1/statuses/update?user_id=" + user_id + "&user_token=" + user_token + "&app_id="
-				+ app_id + "&app_secret=" + app_secret + "&room_hash=" + room_hash + "&text=" + text;
+				+ app_id + "&app_secret=" + app_secret + "&room_hash=" + room_hash + "&text=" + encode_text;
 		Log.d("homo", getData(url));
 		return true;
 	}
