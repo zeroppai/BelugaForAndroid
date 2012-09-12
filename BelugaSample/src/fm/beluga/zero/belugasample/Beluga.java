@@ -1,9 +1,11 @@
 package fm.beluga.zero.belugasample;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -41,13 +43,13 @@ public class Beluga {
 	static Beluga beluga_instanec = new Beluga();
 	private String last_id = "0";
 
-	private Map<Integer,Room> room_list = null;
+	private Map<Integer, Room> room_list = null;
 
 	/**
 	 * タイムライン class
 	 */
 	public static class Timeline {
-		public int id,room_id;
+		public int id, room_id;
 		public String name, text, date_string, room_name;
 		public Bitmap icon_x50, icon_x75, icon_x100;
 	}
@@ -74,21 +76,24 @@ public class Beluga {
 			JSONArray jsons = new JSONArray(getData(url));
 			return (jsons.length() > 0);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 	}
 
 	/**
 	 * ルームの検索、なければnull
+	 * 
 	 * @param id
 	 * @return
 	 */
 	public Room searchRoom(int id) {
 		return room_list.get(id);
 	}
-	
+
 	/**
 	 * ルームリストの取得
+	 * 
 	 * @return
 	 */
 	public List<Room> getRoomList() {
@@ -98,10 +103,10 @@ public class Beluga {
 		return new ArrayList<Room>(room_list.values());
 	}
 
-	private Map<Integer,Room> getFollowing() {
+	private Map<Integer, Room> getFollowing() {
 		String url = "http://api.beluga.fm/1/account/following?user_id=" + user_id + "&user_token=" + user_token + "&app_id="
 				+ app_id + "&app_secret=" + app_secret;
-		Map<Integer,Room> list = new TreeMap<Integer, Room>();
+		Map<Integer, Room> list = new TreeMap<Integer, Room>();
 		try {
 			JSONArray jsons = new JSONArray(getData(url));
 			for (int i = 0; i < jsons.length(); i++) {
@@ -113,7 +118,7 @@ public class Beluga {
 				room.description = obj.getString("description");
 				room.url = obj.getString("url");
 				room.last_update_time = obj.getInt("last_update_time");
-				list.put(room.id,room);
+				list.put(room.id, room);
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -136,7 +141,7 @@ public class Beluga {
 	public boolean postText(String room_hash, String text) {
 		String encode_text = null;
 		try {
-			encode_text = URLEncoder.encode(text,"UTF-8");
+			encode_text = URLEncoder.encode(text, "UTF-8");
 		} catch (Exception e) {
 			return false;
 		}
@@ -203,7 +208,7 @@ public class Beluga {
 				tl.name = jsonObj.getJSONObject("user").getString("name");
 				tl.text = jsonObj.getString("text");
 				tl.date_string = jsonObj.getString("date_string");
-				
+
 				tl.room_id = jsonObj.getJSONObject("room").getInt("id");
 				tl.room_name = jsonObj.getJSONObject("room").getString("name");
 
@@ -263,6 +268,7 @@ public class Beluga {
 				objStream.close();
 			}
 		} catch (IOException e) {
+			e.printStackTrace();
 			return null;
 		}
 		return sReturn;
