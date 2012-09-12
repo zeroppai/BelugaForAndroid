@@ -65,15 +65,17 @@ public class MainActivity extends Activity {
 		timer.schedule(new TimerTask() {
 			@Override public void run() {
 				// TODO Auto-generated method stub
-				updateTimeline();
-
-				// 別スレッドでUIにアクセスしたい場合はHandlerクラスを利用する
-				handler.post(new Runnable() {
-					@Override public void run() {
-						// TODO Auto-generated method stub
-						listAdapter.notifyDataSetChanged();
-					}
-				});
+				if(beluga.isConnected()){
+					updateTimeline();
+	
+					// 別スレッドでUIにアクセスしたい場合はHandlerクラスを利用する
+					handler.post(new Runnable() {
+						@Override public void run() {
+							// TODO Auto-generated method stub
+							listAdapter.notifyDataSetChanged();
+						}
+					});
+				}
 			}
 		}, 10000, 30000);
 
