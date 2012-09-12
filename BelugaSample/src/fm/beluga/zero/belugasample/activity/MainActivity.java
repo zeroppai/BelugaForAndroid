@@ -7,6 +7,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -36,6 +37,7 @@ public class MainActivity extends Activity {
 	private Handler handler = new Handler();
 
 	public static final String APP_STRAGE = "BelugaConfig";
+	private static ProgressDialog objDialog;
 
 	@Override public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -51,14 +53,19 @@ public class MainActivity extends Activity {
 			Toast.makeText(this, "トークンが設定されていません", Toast.LENGTH_LONG).show();
 			goOptionAction();
 		} else {
-			Toast.makeText(this, "タイムラインを取得してます", Toast.LENGTH_LONG).show();
 			beluga.getRoomList();
 		}
+
+		objDialog = new ProgressDialog(this);
+		objDialog.setMessage("タイムラインを取得してます。...");
+		objDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		objDialog.show();
 
 		new Thread(new Runnable() {
 			@Override public void run() {
 				List<Beluga.Timeline> list = beluga.getHome();
 				if (list != null) timeline_list.addAll(list);
+				objDialog.dismiss();
 			}
 		}).start();
 
@@ -67,9 +74,9 @@ public class MainActivity extends Activity {
 		timer.schedule(new TimerTask() {
 			@Override public void run() {
 				// TODO Auto-generated method stub
-				if(beluga.isConnected()){
+				if (beluga.isConnected()) {
 					updateTimeline();
-	
+
 					// 別スレッドでUIにアクセスしたい場合はHandlerクラスを利用する
 					handler.post(new Runnable() {
 						@Override public void run() {
@@ -96,13 +103,13 @@ public class MainActivity extends Activity {
 			}
 		}
 	}
-	
+
 	private void goRoomlistAction() {
 		Intent intent = new Intent(MainActivity.this, RoomlistActivity.class);
 		intent.setAction(Intent.ACTION_VIEW);
 		startActivity(intent);
 	}
-	
+
 	private void goOptionAction() {
 		Intent intent = new Intent(MainActivity.this, OptionActivity.class);
 		intent.setAction(Intent.ACTION_VIEW);
