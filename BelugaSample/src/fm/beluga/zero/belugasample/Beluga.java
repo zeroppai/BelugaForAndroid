@@ -140,14 +140,17 @@ public class Beluga {
 
 	public boolean postText(String room_hash, String text) {
 		String encode_text = null;
+		String encode_room = null;
 		try {
 			encode_text = URLEncoder.encode(text, "UTF-8");
+			encode_room = URLEncoder.encode(room_hash, "UTF-8");
 		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 		String url = "http://api.beluga.fm/1/statuses/update?user_id=" + user_id + "&user_token=" + user_token + "&app_id="
-				+ app_id + "&app_secret=" + app_secret + "&room_hash=" + room_hash + "&text=" + encode_text;
-		Log.d("homo", getData(url));
+				+ app_id + "&app_secret=" + app_secret + "&room_hash=" + encode_room + "&text=" + encode_text;
+		Log.d("homo", "url:"+url+"\npost:"+getData(url));
 		return true;
 	}
 
@@ -236,6 +239,10 @@ public class Beluga {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return null;
 		}
 		return list;
 	}
@@ -268,6 +275,10 @@ public class Beluga {
 				objStream.close();
 			}
 		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		} catch (Exception e) {
+			// TODO: handle exception
 			e.printStackTrace();
 			return null;
 		}
