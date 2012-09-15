@@ -187,8 +187,15 @@ public class Beluga {
 	}
 
 	public List<Timeline> getRoom(String room_hash, String since_id) {
+		String encode_room = null;
+		try {
+			encode_room = URLEncoder.encode(room_hash, "UTF-8");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 		String url = "http://api.beluga.fm/1/statuses/room?user_id=" + user_id + "&user_token=" + user_token + "&app_id="
-				+ app_id + "&app_secret=" + app_secret + "&room_hash=" + room_hash;
+				+ app_id + "&app_secret=" + app_secret + "&room_hash=" + encode_room;
 		if (since_id != "") url += "&since_id=" + since_id;
 		return stringToJson(getData(url));
 	}

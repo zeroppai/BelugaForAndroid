@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
@@ -26,6 +27,7 @@ public class RoomActivity extends Activity {
 	private Timer timer;
 	private Handler handler = new Handler();
 
+	private int room_id;
 	private String room_hash = null;
 	private String last_id = "0";
 
@@ -44,7 +46,9 @@ public class RoomActivity extends Activity {
 		}).start();
 		
 		String hash = getIntent().getStringExtra("room_hash");
+		int r_id = getIntent().getIntExtra("room_id", 0);
 		if(hash!=null) room_hash = hash;
+		if(r_id!=0) room_id = r_id;
 
 		// Timer
 		timer = new Timer(true);
@@ -53,14 +57,6 @@ public class RoomActivity extends Activity {
 				// TODO Auto-generated method stub
 				if (beluga.isConnected()) {
 					updateTimeline();
-
-					// 別スレッドでUIにアクセスしたい場合はHandlerクラスを利用する
-					handler.post(new Runnable() {
-						@Override public void run() {
-							// TODO Auto-generated method stub
-							listAdapter.notifyDataSetChanged();
-						}
-					});
 				}
 			}
 		}, 10000, 30000);
@@ -86,6 +82,8 @@ public class RoomActivity extends Activity {
 	private void goUpdateAction() {
 		Intent intent = new Intent(RoomActivity.this, UpdateActivity.class);
 		intent.setAction(Intent.ACTION_VIEW);
+		intent.putExtra("room_hash", room_hash);
+		intent.putExtra("room_id", room_id);
 		startActivity(intent);
 	}
 
@@ -130,6 +128,13 @@ public class RoomActivity extends Activity {
 					timeline_list.add(0, tl);
 				}
 			}
+			// 別スレッドでUIにアクセスしたい場合はHandlerクラスを利用する
+			handler.post(new Runnable() {
+				@Override public void run() {
+					// TODO Auto-generated method stub
+					listAdapter.notifyDataSetChanged();
+				}
+			});
 		}
 	}
 }

@@ -56,6 +56,7 @@ import fm.beluga.zero.belugasample.R;
 			intent = new Intent(this, RoomActivity.class);
 			Room room = beluga.searchRoom(Integer.parseInt(room_id));
 			// データ
+			intent.putExtra("room_id", room.id);
 			intent.putExtra("room_hash", room.hash);
 
 			tabSpec = tabHost.newTabSpec("room_" + room.id);

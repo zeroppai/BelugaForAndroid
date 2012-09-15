@@ -29,10 +29,20 @@ public class UpdateActivity extends Activity {
 	@Override public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_update);
-
+		
 		// Spinner
 		List<Beluga.Room> list = beluga.getRoomList();
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_item);
+		
+		int room_id = getIntent().getIntExtra("room_id",0);
+		if(room_id!=0){
+			for(int i=0;i<list.size();i++){
+				if(list.get(i).id == room_id){
+					room_id = i;
+					break;
+				}
+			}
+		}
 
 		adapter.setDropDownViewResource(R.layout.new_simple_spinner_dropdown_item);
 		for (int i = 0; i < list.size(); i++) {
@@ -42,7 +52,7 @@ public class UpdateActivity extends Activity {
 
 		sp = (Spinner) findViewById(R.id.spinner1);
 		sp.setAdapter(adapter);
-		sp.setSelection(0);
+		sp.setSelection(room_id);
 
 		// Editor
 		editor = (EditText) findViewById(R.id.edit_text_view);
