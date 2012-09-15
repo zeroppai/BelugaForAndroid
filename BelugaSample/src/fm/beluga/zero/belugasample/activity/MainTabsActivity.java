@@ -58,5 +58,11 @@ import fm.beluga.zero.belugasample.R;
 			tabSpec.setContent(intent);
 			tabHost.addTab(tabSpec);
 		}
+		
+		//タブの大きさを調整
+		for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++) {
+			tabHost.getTabWidget().getChildAt(i).getLayoutParams().width = 150;
+		}
+
 	}
 }
