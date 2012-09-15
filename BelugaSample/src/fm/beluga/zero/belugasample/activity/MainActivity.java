@@ -10,7 +10,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import fm.beluga.zero.belugasample.Beluga;
 import fm.beluga.zero.belugasample.R;
+import fm.beluga.zero.belugasample.activity.OptionActivity.Config;
 
 public class MainActivity extends Activity {
 	private ListAdapter listAdapter;
@@ -177,15 +178,20 @@ public class MainActivity extends Activity {
 				} catch (Exception e) {
 					Log.e("homo", "Icon load error");
 				}
+				
+				Typeface fontType = Config.fontType(getContext());
 
 				mNmae = (TextView) convertView.findViewById(R.id.name_text);
 				mNmae.setText(item.name);
+				mNmae.setTypeface(fontType);
 
 				mText = (TextView) convertView.findViewById(R.id.main_text);
 				mText.setText(item.text);
+				mText.setTypeface(fontType);
 
 				mOption = (TextView) convertView.findViewById(R.id.option_text);
 				mOption.setText(item.date_string + " - " + item.room_name);
+				mOption.setTypeface(fontType);
 			}
 			return convertView;
 		}
