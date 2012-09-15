@@ -49,10 +49,6 @@ public class MainActivity extends Activity {
 			StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
 		}
 
-		// Load Config
-		SharedPreferences settings = getSharedPreferences(APP_STRAGE, 0);
-		beluga.setUserToken(settings.getString("user_id", ""), settings.getString("user_token", ""));
-
 		// Check Token
 		if (!beluga.isConnected()) {
 			Toast.makeText(this, "トークンが設定されていません", Toast.LENGTH_LONG).show();

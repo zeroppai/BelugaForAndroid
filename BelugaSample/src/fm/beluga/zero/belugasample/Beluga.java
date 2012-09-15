@@ -1,11 +1,9 @@
 package fm.beluga.zero.belugasample;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -106,6 +104,7 @@ public class Beluga {
 	private Map<Integer, Room> getFollowing() {
 		String url = "http://api.beluga.fm/1/account/following?user_id=" + user_id + "&user_token=" + user_token + "&app_id="
 				+ app_id + "&app_secret=" + app_secret;
+		Log.d("homo",url);
 		Map<Integer, Room> list = new TreeMap<Integer, Room>();
 		try {
 			JSONArray jsons = new JSONArray(getData(url));

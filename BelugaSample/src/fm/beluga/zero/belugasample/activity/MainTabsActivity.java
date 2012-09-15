@@ -24,6 +24,10 @@ import fm.beluga.zero.belugasample.R;
 		final TabHost tabHost = getTabHost();
 		TabHost.TabSpec tabSpec;
 		Intent intent;
+		
+		// Load Config
+		SharedPreferences settings = getSharedPreferences(MainActivity.APP_STRAGE, 0);
+		beluga.setUserToken(settings.getString("user_id", ""), settings.getString("user_token", ""));
 
 		// Load RoomTab Config
 		// Format: タブのIDと同じ
@@ -31,7 +35,6 @@ import fm.beluga.zero.belugasample.R;
 		//  value : boolean
 		List<Room> all_rooms = beluga.getRoomList();
 		for (Room room : all_rooms) {
-			SharedPreferences settings = getSharedPreferences(MainActivity.APP_STRAGE, 0);
 			if(settings.getBoolean("room_"+room.id,false))
 				room_list.add(String.valueOf(room.id));
 		}
