@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,23 +22,24 @@ import fm.beluga.zero.belugasample.Beluga;
 import fm.beluga.zero.belugasample.R;
 
 public class UpdateActivity extends Activity {
-	final int REQUEST_GALLERY = 0; 
+	final int REQUEST_GALLERY = 0;
 	Beluga beluga = Beluga.Instance();
 	EditText editor;
 	Spinner sp;
 
 	@Override public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 		setContentView(R.layout.activity_update);
-		
+
 		// Spinner
 		List<Beluga.Room> list = beluga.getRoomList();
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_item);
-		
-		int room_id = getIntent().getIntExtra("room_id",0);
-		if(room_id!=0){
-			for(int i=0;i<list.size();i++){
-				if(list.get(i).id == room_id){
+
+		int room_id = getIntent().getIntExtra("room_id", 0);
+		if (room_id != 0) {
+			for (int i = 0; i < list.size(); i++) {
+				if (list.get(i).id == room_id) {
 					room_id = i;
 					break;
 				}
@@ -68,6 +70,7 @@ public class UpdateActivity extends Activity {
 					beluga.postText(room.hash, sb.toString());
 					edit.setText("");
 					Toast.makeText(getApplicationContext(), "投稿しました", Toast.LENGTH_LONG).show();
+					finish();
 				}
 			}
 		});

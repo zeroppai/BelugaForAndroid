@@ -26,7 +26,6 @@
             android:gravity="top|left"
             android:inputType="textMultiLine"
             android:textSize="15sp" >
-
             <requestFocus />
         </EditText>
 
