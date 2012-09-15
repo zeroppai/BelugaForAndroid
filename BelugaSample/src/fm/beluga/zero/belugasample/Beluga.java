@@ -172,7 +172,6 @@ public class Beluga {
 				+ app_id + "&app_secret=" + app_secret + "&since_id=" + since_id;
 		List<Timeline> list = stringToJson(getData(url));
 		if (list != null && list.size() > 0) this.last_id = String.valueOf(list.get(0).id);
-
 		return list;
 	}
 
@@ -196,6 +195,7 @@ public class Beluga {
 		}
 		String url = "http://api.beluga.fm/1/statuses/room?user_id=" + user_id + "&user_token=" + user_token + "&app_id="
 				+ app_id + "&app_secret=" + app_secret + "&room_hash=" + encode_room;
+		Log.d("homo",url);
 		if (since_id != "") url += "&since_id=" + since_id;
 		return stringToJson(getData(url));
 	}

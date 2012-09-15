@@ -29,37 +29,37 @@ public class RoomActivity extends Activity {
 
 	private int room_id;
 	private String room_hash = null;
-	private String last_id = "0";
+	private String last_id = "1";
 
 	@Override protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
-		new Thread(new Runnable() {
-			@Override public void run() {
-				if (room_hash != null) {
-					List<Beluga.Timeline> list = beluga.getRoom(room_hash);
-					if (list != null) timeline_list.addAll(list);
-				}
-			}
-		}).start();
 		
 		String hash = getIntent().getStringExtra("room_hash");
 		int r_id = getIntent().getIntExtra("room_id", 0);
 		if(hash!=null) room_hash = hash;
 		if(r_id!=0) room_id = r_id;
 
-		// Timer
-		timer = new Timer(true);
-		timer.schedule(new TimerTask() {
+		new Thread(new Runnable() {
 			@Override public void run() {
-				// TODO Auto-generated method stub
-				if (beluga.isConnected()) {
-					updateTimeline();
+				if (room_hash != null) {
+					List<Beluga.Timeline> list = beluga.getRoom(room_hash);
+					if (list != null) timeline_list.addAll(list);
+					
+					// Timer
+					timer = new Timer(true);
+					timer.schedule(new TimerTask() {
+						@Override public void run() {
+							// TODO Auto-generated method stub
+							if (beluga.isConnected()) {
+								updateTimeline();
+							}
+						}
+					}, 0, 30000);
 				}
 			}
-		}, 10000, 30000);
+		}).start();
 
 		listAdapter = new ListAdapter(getApplicationContext(), timeline_list);
 

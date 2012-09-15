@@ -67,27 +67,27 @@ public class MainActivity extends Activity {
 				List<Beluga.Timeline> list = beluga.getHome();
 				if (list != null) timeline_list.addAll(list);
 				objDialog.dismiss();
+				
+				// Timer
+				timer = new Timer(true);
+				timer.schedule(new TimerTask() {
+					@Override public void run() {
+						// TODO Auto-generated method stub
+						if (beluga.isConnected()) {
+							updateTimeline();
+
+							// 別スレッドでUIにアクセスしたい場合はHandlerクラスを利用する
+							handler.post(new Runnable() {
+								@Override public void run() {
+									// TODO Auto-generated method stub
+									listAdapter.notifyDataSetChanged();
+								}
+							});
+						}
+					}
+				}, 0, 30000);
 			}
 		}).start();
-
-		// Timer
-		timer = new Timer(true);
-		timer.schedule(new TimerTask() {
-			@Override public void run() {
-				// TODO Auto-generated method stub
-				if (beluga.isConnected()) {
-					updateTimeline();
-
-					// 別スレッドでUIにアクセスしたい場合はHandlerクラスを利用する
-					handler.post(new Runnable() {
-						@Override public void run() {
-							// TODO Auto-generated method stub
-							listAdapter.notifyDataSetChanged();
-						}
-					});
-				}
-			}
-		}, 10000, 30000);
 
 		listAdapter = new ListAdapter(getApplicationContext(), timeline_list);
 
