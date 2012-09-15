@@ -40,7 +40,7 @@ import fm.beluga.zero.belugasample.R;
 		for (Room room : all_rooms) {
 			if (settings.getBoolean("room_" + room.id, false)) room_list.add(String.valueOf(room.id));
 		}
-		
+
 		// 1つ目のタブを作成する
 		intent = new Intent(this, MainActivity.class);
 		// タブのインディケーターを作成する
@@ -69,6 +69,9 @@ import fm.beluga.zero.belugasample.R;
 		for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++) {
 			tabHost.getTabWidget().getChildAt(i).getLayoutParams().width = 150;
 		}
+	}
 
+	@Override public void onUserLeaveHint() {
+		moveTaskToBack(true);
 	}
 }
