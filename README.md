@@ -10,4 +10,6 @@ Apk Binary is [here](https://github.com/zeroppai/BelugaForAndroid/downloads).
 
 Screen capture
 -------------
-![Alt text](https://github.com/zeroppai/BelugaForAndroid/blob/master/ss.png?raw=true "Screen Capture")
+![Alt text](https://github.com/zeroppai/BelugaForAndroid/blob/master/img/ss1.png?raw=true "Screen Capture1")
+![Alt text](https://github.com/zeroppai/BelugaForAndroid/blob/master/img/ss2.png?raw=true "Screen Capture2")
+![Alt text](https://github.com/zeroppai/BelugaForAndroid/blob/master/img/ss3.png?raw=true "Screen Capture3")
