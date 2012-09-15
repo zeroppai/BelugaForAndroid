@@ -12,5 +12,7 @@
     <string name="update_to_room">投稿先を指定</string>
     <string name="oppai">( ﾟ∀ﾟ)o彡°おっぱい！おっぱい！</string>
     <string name="oppai_label">( ﾟ∀ﾟ)o彡°</string>
+    <string name="reload_tabs">タブの再読み込み</string>
+    <string name="cancel">キャンセル</string>
     
 </resources>

@@ -61,7 +61,7 @@ public class OptionActivity extends Activity {
 	}
 
 	private void goMainAction() {
-		Intent intent = new Intent(OptionActivity.this, MainActivity.class);
+		Intent intent = new Intent(OptionActivity.this, MainTabsActivity.class);
 		intent.setAction(Intent.ACTION_VIEW);
 		startActivity(intent);
 	}

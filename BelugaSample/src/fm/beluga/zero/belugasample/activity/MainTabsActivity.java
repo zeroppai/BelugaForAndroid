@@ -8,6 +8,7 @@ import android.app.TabActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TabHost;
 import fm.beluga.zero.belugasample.Beluga;
 import fm.beluga.zero.belugasample.Beluga.Room;
@@ -16,6 +17,7 @@ import fm.beluga.zero.belugasample.R;
 @SuppressWarnings("deprecation") public class MainTabsActivity extends TabActivity {
 	private Beluga beluga = Beluga.Instance();
 	private Set<String> room_list = new HashSet<String>();
+	private SharedPreferences settings;
 
 	@Override public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -24,21 +26,21 @@ import fm.beluga.zero.belugasample.R;
 		final TabHost tabHost = getTabHost();
 		TabHost.TabSpec tabSpec;
 		Intent intent;
-		
+
 		// Load Config
-		SharedPreferences settings = getSharedPreferences(MainActivity.APP_STRAGE, 0);
+		settings = getSharedPreferences(MainActivity.APP_STRAGE, 0);
 		beluga.setUserToken(settings.getString("user_id", ""), settings.getString("user_token", ""));
 
 		// Load RoomTab Config
 		// Format: タブのIDと同じ
-		//  key   : "room_" + rooom.id
-		//  value : boolean
+		// key : "room_" + rooom.id
+		// value : boolean
 		List<Room> all_rooms = beluga.getRoomList();
+		settings = getSharedPreferences(MainActivity.APP_STRAGE, 0);
 		for (Room room : all_rooms) {
-			if(settings.getBoolean("room_"+room.id,false))
-				room_list.add(String.valueOf(room.id));
+			if (settings.getBoolean("room_" + room.id, false)) room_list.add(String.valueOf(room.id));
 		}
-
+		
 		// 1つ目のタブを作成する
 		intent = new Intent(this, MainActivity.class);
 		// タブのインディケーターを作成する
@@ -51,7 +53,7 @@ import fm.beluga.zero.belugasample.R;
 		tabHost.addTab(tabSpec);
 
 		if (room_list != null) for (String room_id : room_list) {
-			intent = new Intent(this, MainActivity.class);
+			intent = new Intent(this, RoomActivity.class);
 			Room room = beluga.searchRoom(Integer.parseInt(room_id));
 			// データ
 			intent.putExtra("room_hash", room.hash);
@@ -61,8 +63,8 @@ import fm.beluga.zero.belugasample.R;
 			tabSpec.setContent(intent);
 			tabHost.addTab(tabSpec);
 		}
-		
-		//タブの大きさを調整
+
+		// タブの大きさを調整
 		for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++) {
 			tabHost.getTabWidget().getChildAt(i).getLayoutParams().width = 150;
 		}
