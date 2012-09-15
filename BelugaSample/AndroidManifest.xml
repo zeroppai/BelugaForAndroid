@@ -15,14 +15,23 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="fm.beluga.zero.belugasample.activity.MainActivity"
+            android:name="fm.beluga.zero.belugasample.activity.MainTabsActivity"
             android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <activity
+            android:name="fm.beluga.zero.belugasample.activity.MainActivity"
+            android:label="@string/title_activity_main" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
         <activity
             android:name="fm.beluga.zero.belugasample.activity.OptionActivity"
             android:label="@string/option_activity" >

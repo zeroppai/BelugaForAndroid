@@ -158,7 +158,7 @@ public class MainActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	public class ListAdapter extends ArrayAdapter<Beluga.Timeline> {
+	public static class ListAdapter extends ArrayAdapter<Beluga.Timeline> {
 		private LayoutInflater mInflater;
 		private TextView mNmae, mText, mOption;
 		private ImageView mIcon;
