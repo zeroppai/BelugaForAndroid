@@ -39,9 +39,20 @@ public class ImgurAPI {
 	}
 
 	static private String postImage(Bitmap image) {
+		String base64Image;
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-		String base64Image = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
+		try{
+			base64Image = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
+		}catch (OutOfMemoryError e) {
+			double r_width=image.getWidth() ,r_height =image.getHeight();
+			double rate = Math.min(r_width,r_height)/Math.max(r_width,r_height);
+			r_width = (r_width>r_height?600:600*rate);
+			r_height = (r_width<r_height?600:600*rate);
+
+			Bitmap resized_bmp = Bitmap.createScaledBitmap(image, (int)r_width, (int)r_height, false); 
+			return postImage(resized_bmp);
+		}
 		ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
 
 		params.add(new BasicNameValuePair("key", APIKey));
