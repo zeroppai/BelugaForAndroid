@@ -55,8 +55,10 @@
                 android:id="@+id/main_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clickable="true"
                 android:ems="10"
                 android:inputType="textMultiLine"
+                android:linksClickable="true"
                 android:text="text is here"
                 android:textColor="#ff000000"
                 android:textSize="16sp" />

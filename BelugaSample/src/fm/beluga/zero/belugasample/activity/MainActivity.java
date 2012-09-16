@@ -16,12 +16,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -45,9 +47,9 @@ public class MainActivity extends Activity {
 	@Override public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
 		// for over 4.0
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
 			StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
 		}
 
@@ -69,7 +71,7 @@ public class MainActivity extends Activity {
 				List<Beluga.Timeline> list = beluga.getHome();
 				if (list != null) timeline_list.addAll(list);
 				objDialog.dismiss();
-				
+
 				// Timer
 				timer = new Timer(true);
 				timer.schedule(new TimerTask() {
@@ -91,8 +93,7 @@ public class MainActivity extends Activity {
 			}
 		}).start();
 
-		listAdapter = new ListAdapter(getApplicationContext(), timeline_list);
-
+		listAdapter = new ListAdapter(this, timeline_list);
 		ListView listView = (ListView) findViewById(R.id.listView1);
 		listView.setAdapter(listAdapter);
 	}
@@ -158,7 +159,7 @@ public class MainActivity extends Activity {
 
 	public static class ListAdapter extends ArrayAdapter<Beluga.Timeline> {
 		private LayoutInflater mInflater;
-		private TextView mSname,mNmae, mText, mOption;
+		private TextView mSname, mNmae, mText, mOption;
 		private ImageView mIcon;
 
 		public ListAdapter(Context context, List<Beluga.Timeline> objects) {
@@ -178,17 +179,16 @@ public class MainActivity extends Activity {
 					mIcon.setImageBitmap(item.icon_x75);
 				} catch (Exception e) {
 					e.printStackTrace();
-					
+
 					mIcon.setImageBitmap(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.ic_launcher));
 					Log.e("homo", "Icon load error");
 				}
-				
+
 				Typeface fontType = Config.fontType(getContext());
-				
+
 				mSname = (TextView) convertView.findViewById(R.id.sname_text);
 				mSname.setText(item.user_sname);
 				mSname.setTypeface(fontType);
-
 
 				mNmae = (TextView) convertView.findViewById(R.id.name_text);
 				mNmae.setText(item.user_name);
@@ -197,6 +197,8 @@ public class MainActivity extends Activity {
 				mText = (TextView) convertView.findViewById(R.id.main_text);
 				mText.setText(item.text);
 				mText.setTypeface(fontType);
+				Linkify.addLinks(mText, Linkify.ALL);
+//				mText.setMovementMethod(null);
 
 				mOption = (TextView) convertView.findViewById(R.id.option_text);
 				mOption.setText(item.date_string + " - " + item.room_name);
