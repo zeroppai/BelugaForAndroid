@@ -48,7 +48,7 @@ public class Beluga {
 	 */
 	public static class Timeline {
 		public int id, room_id;
-		public String name, text, date_string, room_name;
+		public String user_name, user_sname, text, date_string, room_name;
 		public Bitmap icon_x50, icon_x75, icon_x100;
 	}
 
@@ -211,7 +211,8 @@ public class Beluga {
 				JSONObject jsonObj = jsons.getJSONObject(i);
 				Timeline tl = new Timeline();
 				tl.id = jsonObj.getInt("id");
-				tl.name = jsonObj.getJSONObject("user").getString("name");
+				tl.user_name = jsonObj.getJSONObject("user").getString("name");
+				tl.user_sname = jsonObj.getJSONObject("user").getString("screen_name");
 				tl.text = jsonObj.getString("text");
 				tl.date_string = jsonObj.getString("date_string");
 

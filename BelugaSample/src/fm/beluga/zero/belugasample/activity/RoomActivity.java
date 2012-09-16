@@ -60,6 +60,7 @@ public class RoomActivity extends Activity {
 				}
 			}
 		}).start();
+		Toast.makeText(getApplicationContext(), "タイムラインを取得しています。…", Toast.LENGTH_LONG).show();
 
 		listAdapter = new ListAdapter(getApplicationContext(), timeline_list);
 

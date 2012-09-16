@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
@@ -157,7 +158,7 @@ public class MainActivity extends Activity {
 
 	public static class ListAdapter extends ArrayAdapter<Beluga.Timeline> {
 		private LayoutInflater mInflater;
-		private TextView mNmae, mText, mOption;
+		private TextView mSname,mNmae, mText, mOption;
 		private ImageView mIcon;
 
 		public ListAdapter(Context context, List<Beluga.Timeline> objects) {
@@ -176,13 +177,21 @@ public class MainActivity extends Activity {
 				try {
 					mIcon.setImageBitmap(item.icon_x75);
 				} catch (Exception e) {
+					e.printStackTrace();
+					
+					mIcon.setImageBitmap(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.ic_launcher));
 					Log.e("homo", "Icon load error");
 				}
 				
 				Typeface fontType = Config.fontType(getContext());
+				
+				mSname = (TextView) convertView.findViewById(R.id.sname_text);
+				mSname.setText(item.user_sname);
+				mSname.setTypeface(fontType);
+
 
 				mNmae = (TextView) convertView.findViewById(R.id.name_text);
-				mNmae.setText(item.name);
+				mNmae.setText(item.user_name);
 				mNmae.setTypeface(fontType);
 
 				mText = (TextView) convertView.findViewById(R.id.main_text);
