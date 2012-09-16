@@ -100,7 +100,7 @@ public class UpdateActivity extends Activity {
 				ImgUrl imgurl = ImgurAPI.uploadImage(img);
 				editor.setText(editor.getText() + " " + imgurl.url);
 			} catch (Exception e) {
-
+				e.printStackTrace();
 			}
 		}
 	}

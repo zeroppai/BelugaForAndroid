@@ -8,8 +8,9 @@ import android.app.TabActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.TabHost;
+import android.widget.Toast;
 import fm.beluga.zero.belugasample.Beluga;
 import fm.beluga.zero.belugasample.Beluga.Room;
 import fm.beluga.zero.belugasample.R;
@@ -70,8 +71,14 @@ import fm.beluga.zero.belugasample.R;
 			tabHost.getTabWidget().getChildAt(i).getLayoutParams().width = 150;
 		}
 	}
-
-	@Override public void onUserLeaveHint() {
-		moveTaskToBack(true);
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		switch(keyCode){
+		case KeyEvent.KEYCODE_HOME:
+			moveTaskToBack(true);
+			return true;
+		}
+		return false;
 	}
 }
