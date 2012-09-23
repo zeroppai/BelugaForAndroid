@@ -49,7 +49,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		// for over 3.0
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
 		}
 
