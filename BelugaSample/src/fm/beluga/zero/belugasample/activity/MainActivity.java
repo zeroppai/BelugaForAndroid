@@ -10,6 +10,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -24,12 +26,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TabHost;
+import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 import android.widget.Toast;
 import fm.beluga.zero.belugasample.Beluga;
+import fm.beluga.zero.belugasample.Beluga.Room;
 import fm.beluga.zero.belugasample.R;
 import fm.beluga.zero.belugasample.activity.OptionActivity.Config;
 
@@ -44,9 +50,12 @@ public class MainActivity extends Activity {
 	public static final String APP_STRAGE = "BelugaConfig";
 	private static ProgressDialog objDialog;
 
-	@Override public void onCreate(Bundle savedInstanceState) {
+	private TabHost tabHost = null;
+
+	@SuppressWarnings("deprecation") @Override public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		tabHost = ((MainTabsActivity) getParent()).getTabHost();
 
 		// for over 3.0
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -94,6 +103,35 @@ public class MainActivity extends Activity {
 		listAdapter = new ListAdapter(this, timeline_list);
 		ListView listView = (ListView) findViewById(R.id.listView1);
 		listView.setAdapter(listAdapter);
+		listView.setLongClickable(true);
+		listView.setOnItemLongClickListener(new OnItemLongClickListener() {
+			@Override public boolean onItemLongClick(AdapterView<?> adapter, View view, final int position,long id) {
+				final Beluga.Timeline item = (Beluga.Timeline)adapter.getItemAtPosition(position);
+				String tag = "room_"+item.room_id;
+				tabHost.setCurrentTabByTag(tag);
+				if(!tabHost.getCurrentTabTag().equalsIgnoreCase(tag)){
+					//タブを追加
+					Intent intent = new Intent(getParent(), RoomActivity.class);
+					Room room = beluga.searchRoom(item.room_id);
+					
+					// データ
+					intent.putExtra("room_id", room.id);
+					intent.putExtra("room_hash", room.hash);
+
+					TabSpec tabSpec = tabHost.newTabSpec("room_" + room.id);
+					tabSpec.setIndicator(room.name);
+					tabSpec.setContent(intent);
+					tabHost.addTab(tabSpec);
+					
+					SharedPreferences settings = getSharedPreferences(MainActivity.APP_STRAGE, 0);
+					Editor edit = settings.edit();
+					edit.putBoolean("room_"+room.id, true);
+					edit.commit();
+					tabHost.setCurrentTabByTag(tag);
+				}
+				return true;
+			}
+		});
 	}
 
 	private void updateTimeline() {

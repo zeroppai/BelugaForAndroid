@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -71,6 +72,7 @@ public class Beluga {
 		try {
 			String url = "http://api.beluga.fm/1/statuses/home?user_id=" + user_id + "&user_token=" + user_token + "&app_id="
 					+ app_id + "&app_secret=" + app_secret + "&since_id=0";
+			Log.d("homo",url);
 			JSONArray jsons = new JSONArray(getData(url));
 			return (jsons.length() > 0);
 		} catch (Exception e) {
@@ -220,23 +222,13 @@ public class Beluga {
 				tl.room_name = jsonObj.getJSONObject("room").getString("name");
 
 				// アイコン処理
-				try {
-					String url_x50 = jsonObj.getJSONObject("user").getJSONObject("profile_image_sizes").getString("x50");
-					String url_x75 = jsonObj.getJSONObject("user").getJSONObject("profile_image_sizes").getString("x75");
-					String url_x100 = jsonObj.getJSONObject("user").getJSONObject("profile_image_sizes").getString("x100");
-					tl.icon_x50 = BitmapFactory.decodeStream((new URL(url_x50).openStream()));
-					tl.icon_x75 = BitmapFactory.decodeStream((new URL(url_x75).openStream()));
-					tl.icon_x100 = BitmapFactory.decodeStream((new URL(url_x100).openStream()));
-				} catch (MalformedURLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (Exception e) {
-					// TODO: handle exception
-					e.printStackTrace();
-				}
+				String url_x50 = jsonObj.getJSONObject("user").getJSONObject("profile_image_sizes").getString("x50");
+				String url_x75 = jsonObj.getJSONObject("user").getJSONObject("profile_image_sizes").getString("x75");
+				String url_x100 = jsonObj.getJSONObject("user").getJSONObject("profile_image_sizes").getString("x100");
+				tl.icon_x50 = getBitMapFromUrl(url_x50);
+				tl.icon_x75 = getBitMapFromUrl(url_x75);
+				tl.icon_x100 = getBitMapFromUrl(url_x100);
+
 				list.add(tl);
 			}
 		} catch (JSONException e) {
@@ -250,6 +242,25 @@ public class Beluga {
 		}
 		return list;
 	}
+	
+	private Bitmap getBitMapFromUrl(String url){
+		Bitmap result = null;
+		try {
+			result = BitmapFactory.decodeStream((new URL(url).openStream()));
+		} catch (SocketTimeoutException e){
+			result = BitmapFactory.decodeFile("/BelugaSample/res/drawable-hdpi/ic_launcher.png");
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return result;
+	}
 
 	/**
 	 * 指定URLからgetした文字列を取得する
@@ -261,7 +272,7 @@ public class Beluga {
 		HttpClient objHttp = new DefaultHttpClient();
 		HttpParams params = objHttp.getParams();
 		HttpConnectionParams.setConnectionTimeout(params, 1000); // 接続のタイムアウト
-		HttpConnectionParams.setSoTimeout(params, 1000); // データ取得のタイムアウト
+		HttpConnectionParams.setSoTimeout(params, 3000); // データ取得のタイムアウト
 		String sReturn = "";
 		try {
 			HttpGet objGet = new HttpGet(sUrl);
@@ -280,11 +291,11 @@ public class Beluga {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-			return null;
+			return sReturn;
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-			return null;
+			return sReturn;
 		}
 		return sReturn;
 	}

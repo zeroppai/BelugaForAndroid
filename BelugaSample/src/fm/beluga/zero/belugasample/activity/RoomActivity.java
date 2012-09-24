@@ -68,9 +68,9 @@ public class RoomActivity extends Activity {
 		Toast.makeText(getApplicationContext(), "タイムラインを取得しています。…", Toast.LENGTH_LONG).show();
 
 		listAdapter = new ListAdapter(this, timeline_list);
-
 		ListView listView = (ListView) findViewById(R.id.listView1);
 		listView.setAdapter(listAdapter);
+		((MainTabsActivity)this.getParent()).getTabHost();
 	}
 
 	private void goRoomlistAction() {
