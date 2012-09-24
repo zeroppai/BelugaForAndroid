@@ -72,6 +72,12 @@ public class MainActivity extends Activity {
 				if (list != null) timeline_list.addAll(list);
 				objDialog.dismiss();
 
+				handler.post(new Runnable() {
+					@Override public void run() {
+						listAdapter.notifyDataSetChanged();
+					}
+				});
+
 				// Timer
 				timer = new Timer(true);
 				timer.schedule(new TimerTask() {
@@ -79,14 +85,6 @@ public class MainActivity extends Activity {
 						// TODO Auto-generated method stub
 						if (beluga.isConnected()) {
 							updateTimeline();
-
-							// 別スレッドでUIにアクセスしたい場合はHandlerクラスを利用する
-							handler.post(new Runnable() {
-								@Override public void run() {
-									// TODO Auto-generated method stub
-									listAdapter.notifyDataSetChanged();
-								}
-							});
 						}
 					}
 				}, 0, 30000);
@@ -106,6 +104,13 @@ public class MainActivity extends Activity {
 				timeline_list.add(0, tl);
 			}
 		}
+		// 別スレッドでUIにアクセスしたい場合はHandlerクラスを利用する
+		handler.post(new Runnable() {
+			@Override public void run() {
+				// TODO Auto-generated method stub
+				listAdapter.notifyDataSetChanged();
+			}
+		});
 	}
 
 	private void goRoomlistAction() {
@@ -198,7 +203,6 @@ public class MainActivity extends Activity {
 				mText.setText(item.text);
 				mText.setTypeface(fontType);
 				Linkify.addLinks(mText, Linkify.ALL);
-//				mText.setMovementMethod(null);
 
 				mOption = (TextView) convertView.findViewById(R.id.option_text);
 				mOption.setText(item.date_string + " - " + item.room_name);

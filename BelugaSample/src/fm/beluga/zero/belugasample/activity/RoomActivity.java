@@ -46,6 +46,11 @@ public class RoomActivity extends Activity {
 				if (room_hash != null) {
 					List<Beluga.Timeline> list = beluga.getRoom(room_hash);
 					if (list != null) timeline_list.addAll(list);
+					handler.post(new Runnable() {
+						@Override public void run() {
+							listAdapter.notifyDataSetChanged();
+						}
+					});
 					
 					// Timer
 					timer = new Timer(true);
@@ -62,7 +67,7 @@ public class RoomActivity extends Activity {
 		}).start();
 		Toast.makeText(getApplicationContext(), "タイムラインを取得しています。…", Toast.LENGTH_LONG).show();
 
-		listAdapter = new ListAdapter(getApplicationContext(), timeline_list);
+		listAdapter = new ListAdapter(this, timeline_list);
 
 		ListView listView = (ListView) findViewById(R.id.listView1);
 		listView.setAdapter(listAdapter);
